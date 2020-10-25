@@ -1,0 +1,1 @@
+/code/exercise_ws/devel/.private/line_detector/share/line_detector/cmake/line_detectorConfig.cmake
