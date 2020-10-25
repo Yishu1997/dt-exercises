@@ -92,6 +92,8 @@ class LaneControllerNode(DTROS):
         self.target_msg = Vector2D()
         
         self.controller = PurePursuitLaneController(self.params)
+        
+        self.car_control_msg = Twist2DStamped()
 
     def cbLanePoses(self, input_pose_msg):
         """Callback receiving pose messages from multiple topics.
@@ -103,14 +105,15 @@ class LaneControllerNode(DTROS):
         """
         self.pose_msg = input_pose_msg
 
-        car_control_msg = Twist2DStamped()
-        car_control_msg.header = self.pose_msg.header
+        car_control_msg1 = Twist2DStamped()
+        car_control_msg1.header = self.pose_msg.header
 
         # TODO This needs to get changed
-        car_control_msg.v = self.av
-        car_control_msg.omega = self.ao
-        
-        self.publishCmd(car_control_msg)
+        #self.car_control_msg.v = 0.5 #self.av
+        #self.car_control_msg.omega = 0 #self.ao
+        car_control_msg1.v,car_control_msg1.omega = self.controller.pure_pursuit()
+        print("CONTROL COMMAND: ", car_control_msg1)
+        self.publishCmd(car_control_msg1)
 
     def cbSegList(self, input_segments):
         """Callback receiving segment messages
@@ -131,13 +134,13 @@ class LaneControllerNode(DTROS):
             #self.logwarn("THERE ARE NO POINTS AVAILABLE")
             if self.v == 0 and self.omega == 0:
                 #self.logwarn("DUCKIEBOT CANT DETECT ANY SEGMENTS AND IS THEREFORE STAGNANT.")
-                self.av = 0.05
-                self.ao = 0
+                self.car_control_msg.v = 0.05
+                self.car_control_msg.omega = 0
                 #print("COMMAND 1 EXECUTED")
             else:
                 #self.logwarn("SEGMENTS NOT DETECTED(NOT ABLE TO SEE)")
-                self.av = 0
-                self.ao = 0
+                self.car_control_msg.v = 0
+                self.car_control_msg.omega = 0
                 #print("COMMAND 2 EXECUTED")
         else:
             
@@ -166,7 +169,7 @@ class LaneControllerNode(DTROS):
         v = self.max_velocity * (1 - abs(sin_alpha))
         v = np.clip(v, min_speed, max_speed)
         omega = 2 * sin_alpha / self.lookahead_dist"""
-        self.av,self.ao = self.controller.pure_pursuit()
+        #self.car_control_msg.v,self.car_control_msg.omega = self.controller.pure_pursuit()
         #self.ao = omega
         # Emptying all the stored points in the deque
         self.empty_all_points()
