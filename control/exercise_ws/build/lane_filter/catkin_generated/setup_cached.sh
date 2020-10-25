@@ -9,6 +9,7 @@
 # modified environment variables
 export CMAKE_PREFIX_PATH="/code/exercise_ws/devel/.private/lane_filter:$CMAKE_PREFIX_PATH"
 export LD_LIBRARY_PATH="/code/exercise_ws/devel/.private/lane_filter/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/code/exercise_ws/devel/.private/lane_filter/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/code/exercise_ws/build/lane_filter'
 export PYTHONPATH="/code/exercise_ws/devel/.private/lane_filter/lib/python3/dist-packages:$PYTHONPATH"
 export ROSLISP_PACKAGE_DIRECTORIES="/code/exercise_ws/devel/.private/lane_filter/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
