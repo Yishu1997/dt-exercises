@@ -200,19 +200,13 @@ class LaneControllerNode(DTROS):
         #target_dot_product =  self.target.dot(self.target)
         hypothenuse = np.sqrt(self.target.dot(self.target))
         sin_alpha = self.target[1] / hypothenuse
-        
         min_speed = 0.1
         max_speed = 1.0
-
-        # TODO: maybe play around with changing V depending on sin_alpha.
         v = self.max_velocity * (1 - abs(sin_alpha))
         v = np.clip(v, min_speed, max_speed)
-
-        omega = 2 * sin_alpha / self.lookahead_dist
-        
+        omega = 2 * sin_alpha / self.lookahead_dist        
         self.av = v
         self.ao = omega
-
         # Emptying all the stored points in the deque
         self.empty_all_points()
     
@@ -245,8 +239,7 @@ class LaneControllerNode(DTROS):
             x = np.mean([p.x for p in points_to_average])
             y = np.mean([p.y for p in points_to_average])
         return np.asarray([x, y])
-        # centroid = Point(x=x_centroid, y=y_centroid)
-        # return centroid
+
     
     def points_are_available(self, color=None):
         return self.counting_points(color) != 0
